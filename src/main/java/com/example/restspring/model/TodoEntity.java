@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @NoArgsConstructor // 기본 생성자
 @AllArgsConstructor // 생성자
 @Data // Getter, Setter 생성 TODO: getter setter랑 차이가 뭐지? 찾아보기
-@Table(name = "Todo")
+@Table(name = "plan")
 public class TodoEntity {
     @Id
     @GeneratedValue(generator = "system-uuid")
