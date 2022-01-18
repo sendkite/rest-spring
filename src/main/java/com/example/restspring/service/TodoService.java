@@ -5,6 +5,7 @@ import com.example.restspring.persistence.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,21 @@ public class TodoService {
         repository.save(entity);
         return retrieve(entity.getUserId());
     }
+
+    // 삭제
+    public List<TodoEntity> delete(final TodoEntity entity) {
+        validation(entity);
+
+        try {
+            repository.delete(entity);
+        } catch(Exception e) {
+            log.error("error deleting entity " + entity.getId());
+            throw new RuntimeException("error deleting entity " + entity.getId());
+        }
+
+        return retrieve(entity.getUserId());
+    }
+
 
     // 벨리데이션 분리
     private void validation(TodoEntity entity) {
