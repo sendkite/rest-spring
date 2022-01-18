@@ -43,4 +43,9 @@ public class TodoService {
         // 3. return
         return repository.findByUserId(entity.getUserId());
     }
+
+    public List<TodoEntity> retrieve(final String userId) {
+        log.info("UserId is {}", userId);
+        return repository.findByUserId(userId);
+    }
 }

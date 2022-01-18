@@ -45,4 +45,13 @@ public class TodoController {
 
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping
+    public ResponseEntity<?> retrieveTodoList() {
+        String tempUserId = "temp-user";
+        List<TodoEntity> entities = service.retrieve(tempUserId);
+        List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+        ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+        return ResponseEntity.ok().body(response);
+    }
 }
