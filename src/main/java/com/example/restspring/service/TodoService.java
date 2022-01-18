@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,18 +24,11 @@ public class TodoService {
         return savedEntiry.getTitle();
 
     }
-
+    // 생성
     public List<TodoEntity> create(final TodoEntity entity){
         // 검증, save, return 세 단계로 구성
         // 1. validation
-        if (entity == null) {
-            log.warn("Entity can not be null");
-        }
-
-        if (entity.getUserId() == null) {
-            log.warn("Unknown user");
-            throw new RuntimeException("Unkown user");
-        }
+        validation(entity);
 
         // 2. save
         repository.save(entity);
@@ -44,8 +38,34 @@ public class TodoService {
         return repository.findByUserId(entity.getUserId());
     }
 
+    // 조회
     public List<TodoEntity> retrieve(final String userId) {
         log.info("UserId is {}", userId);
         return repository.findByUserId(userId);
+    }
+
+    // 수정
+    public List<TodoEntity> update(final TodoEntity entity) {
+        validation(entity);
+
+        final Optional<TodoEntity> original = repository.findById(entity.getId());
+        original.ifPresent(todo -> {
+            todo.setTitle(entity.getTitle());
+            todo.setDone(entity.isDone()); // 불리언은 is로 바뀜 옵셔널이 NUll이 아니면 이렇게
+        });
+        repository.save(entity);
+        return retrieve(entity.getUserId());
+    }
+
+    // 벨리데이션 분리
+    private void validation(TodoEntity entity) {
+        if (entity == null) {
+            log.warn("Entity can not be null");
+        }
+
+        if (entity.getUserId() == null) {
+            log.warn("Unknown user");
+            throw new RuntimeException("Unkown user");
+        }
     }
 }
