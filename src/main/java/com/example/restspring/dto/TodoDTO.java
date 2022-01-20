@@ -18,7 +18,7 @@ public class TodoDTO {
     public TodoDTO(final TodoEntity entity) { // 매개변수 재할당 방지용도로 final
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.done = entity.isDone(); // TODO : 불리언은 getter 안쓰나?
+        this.done = entity.isDone(); // 불리언은 자동으로 getDone이 아니라 isDone으로 바뀜.
     }
 
     public static TodoEntity toEntity(final TodoDTO dto) {
